@@ -1,6 +1,6 @@
-/* ==============================
-   DOCROP - MAIN STYLES
-   ============================== */
+/* =========================================================
+   DOCROP - MAIN DASHBOARD UI
+   ========================================================= */
 
 * {
     margin: 0;
@@ -8,373 +8,521 @@
     box-sizing: border-box;
 }
 
+html {
+    scroll-behavior: smooth;
+}
+
 body {
-    font-family: Arial, Helvetica, sans-serif;
-    background: #f4f8f3;
-    color: #26352b;
-    line-height: 1.6;
+    font-family: "Segoe UI", Arial, sans-serif;
+    color: #173b25;
+    min-height: 100vh;
+
+    /* YOUR LEAF BACKGROUND */
+    background-image:
+        linear-gradient(
+            rgba(7, 30, 17, 0.58),
+            rgba(7, 30, 17, 0.58)
+        ),
+        url("assets/dashboard-bg.jpg");
+
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
 }
 
 
-/* ==============================
+/* =========================================================
    HEADER
-   ============================== */
+   ========================================================= */
 
-.header {
-    background: white;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 18px 8%;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+header {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.96);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+
+    position: sticky;
+    top: 0;
+    z-index: 1000;
 }
 
-.logo-section {
+.navbar {
+    width: min(1200px, 92%);
+    min-height: 90px;
+    margin: auto;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 30px;
+}
+
+
+/* LOGO */
+
+.logo-container {
     display: flex;
     align-items: center;
     gap: 12px;
 }
 
-.logo {
-    font-size: 42px;
+.logo-image {
+    width: 175px;
+    height: auto;
+    display: block;
+    object-fit: contain;
 }
 
-.logo-section h1 {
-    color: #24733a;
-    font-size: 30px;
+
+/* Language */
+
+.language-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
-.logo-section p {
-    color: #68766c;
-    font-size: 13px;
+.language-wrapper span {
+    font-size: 18px;
 }
+
+#languageSelect {
+    padding: 9px 30px 9px 12px;
+
+    border: 1px solid #b7d5bd;
+    border-radius: 9px;
+
+    background: white;
+    color: #185c31;
+
+    font-size: 14px;
+    font-weight: 600;
+
+    cursor: pointer;
+    outline: none;
+}
+
+#languageSelect:focus {
+    border-color: #238542;
+    box-shadow: 0 0 0 3px rgba(35, 133, 66, 0.12);
+}
+
+
+/* NAVIGATION */
 
 nav {
     display: flex;
-    gap: 25px;
+    align-items: center;
+    gap: 30px;
 }
 
 nav a {
+    color: #173b25;
     text-decoration: none;
-    color: #35513d;
-    font-weight: 600;
+
+    font-size: 16px;
+    font-weight: 650;
+
+    transition: 0.25s ease;
 }
 
 nav a:hover {
-    color: #2f8b46;
+    color: #19853d;
 }
 
 
-/* ==============================
+/* =========================================================
    MAIN
-   ============================== */
+   ========================================================= */
 
 main {
-    max-width: 1100px;
+    width: min(1200px, 92%);
     margin: auto;
-    padding: 30px 20px 60px;
+    padding: 55px 0 80px;
 }
 
 
-/* ==============================
-   WELCOME
-   ============================== */
+/* =========================================================
+   HERO / WELCOME
+   ========================================================= */
 
-.welcome {
+.welcome-section {
     text-align: center;
-    margin-bottom: 35px;
+    color: white;
+
+    padding: 45px 20px 40px;
 }
 
-.welcome h2 {
-    font-size: 32px;
-    color: #1f6533;
-    margin-bottom: 8px;
+.welcome-section h1 {
+    font-size: clamp(32px, 5vw, 52px);
+    font-weight: 750;
+
+    margin-bottom: 15px;
+
+    text-shadow: 0 3px 15px rgba(0, 0, 0, 0.45);
 }
 
-.welcome p {
-    color: #68766c;
-    font-size: 17px;
+.welcome-section p {
+    font-size: 18px;
+    line-height: 1.7;
+
+    max-width: 750px;
+    margin: auto;
+
+    color: rgba(255, 255, 255, 0.92);
+
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.45);
 }
 
 
-/* ==============================
-   INPUT SECTION
-   ============================== */
+/* =========================================================
+   INPUT CARDS
+   ========================================================= */
 
 .input-section {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 25px;
-    margin-bottom: 30px;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 28px;
+
+    margin-top: 15px;
 }
 
 .input-card {
-    background: white;
-    border: 1px solid #d7e5d8;
-    border-radius: 16px;
-    padding: 30px;
+    background: rgba(255, 255, 255, 0.94);
+
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    border-radius: 22px;
+
+    padding: 40px 30px;
+
     text-align: center;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.18);
+
+    transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease;
 }
 
-.icon {
-    font-size: 48px;
-    margin-bottom: 10px;
+.input-card:hover {
+    transform: translateY(-5px);
+
+    box-shadow: 0 18px 42px rgba(0, 0, 0, 0.25);
 }
 
-.input-card h3 {
-    color: #286b39;
-    font-size: 21px;
-    margin-bottom: 8px;
+.input-card .icon {
+    font-size: 52px;
+    margin-bottom: 18px;
+}
+
+.input-card h2 {
+    color: #176b35;
+    font-size: 23px;
+    margin-bottom: 12px;
 }
 
 .input-card p {
-    color: #6d796f;
-    margin-bottom: 18px;
+    color: #617066;
+    font-size: 16px;
+    line-height: 1.6;
+    margin-bottom: 22px;
 }
 
 
-/* ==============================
+/* =========================================================
    BUTTONS
-   ============================== */
+   ========================================================= */
 
-button {
-    border: none;
-    border-radius: 8px;
-    padding: 12px 22px;
-    font-size: 15px;
-    font-weight: 600;
+button,
+.primary-btn,
+.secondary-btn {
+    font-family: inherit;
     cursor: pointer;
-    transition: 0.2s;
+    transition: all 0.25s ease;
 }
 
 .primary-btn {
-    background: #3c914d;
+    background: linear-gradient(135deg, #16813d, #0d672e);
     color: white;
+
+    border: none;
+    border-radius: 10px;
+
+    padding: 13px 28px;
+
+    font-size: 16px;
+    font-weight: 700;
+
+    box-shadow: 0 6px 16px rgba(15, 105, 47, 0.25);
 }
 
 .primary-btn:hover {
-    background: #2f753d;
+    transform: translateY(-2px);
+
+    box-shadow: 0 9px 22px rgba(15, 105, 47, 0.35);
 }
 
 .secondary-btn {
-    background: #e9f4ea;
-    color: #2d743b;
-    border: 1px solid #a9cfae;
+    background: #edf8ef;
+    color: #176b35;
+
+    border: 1px solid #a9d4b2;
+    border-radius: 10px;
+
+    padding: 12px 25px;
+
+    font-size: 15px;
+    font-weight: 700;
 }
 
 .secondary-btn:hover {
-    background: #dceedd;
-}
-
-.file-name,
-.voice-status {
-    font-size: 13px;
-    margin-top: 12px;
+    background: #dff2e3;
+    transform: translateY(-2px);
 }
 
 
-/* ==============================
-   ANALYZE
-   ============================== */
+/* Analyze button */
 
 .analyze-section {
     text-align: center;
-    margin: 30px 0 45px;
+    padding: 35px 20px;
 }
 
-.analyze-btn {
-    background: #176b38;
+#analyzeButton {
+    background: linear-gradient(135deg, #087532, #075b28);
+
     color: white;
-    font-size: 18px;
-    padding: 15px 35px;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(23, 107, 56, 0.25);
+
+    border: none;
+    border-radius: 13px;
+
+    padding: 17px 45px;
+
+    font-size: 19px;
+    font-weight: 750;
+
+    box-shadow: 0 10px 25px rgba(5, 86, 37, 0.35);
 }
 
-.analyze-btn:hover {
-    background: #10572d;
-    transform: translateY(-1px);
+#analyzeButton:hover {
+    transform: translateY(-3px) scale(1.01);
+
+    box-shadow: 0 14px 30px rgba(5, 86, 37, 0.45);
 }
 
-.privacy-text {
-    margin-top: 10px;
-    color: #7a857d;
-    font-size: 12px;
+.analyze-section small {
+    display: block;
+    margin-top: 12px;
+
+    color: rgba(255, 255, 255, 0.85);
 }
 
 
-/* ==============================
-   RESULTS
-   ============================== */
+/* =========================================================
+   RESULT / CONTENT SECTIONS
+   ========================================================= */
 
-.results-section {
-    background: white;
-    border-radius: 16px;
-    padding: 30px;
-    margin-bottom: 30px;
-    border: 1px solid #d7e5d8;
+.result-section,
+.recommendation-section,
+.location-section,
+.followup-section {
+    margin-top: 30px;
+
+    background: rgba(255, 255, 255, 0.95);
+
+    border-radius: 22px;
+    padding: 35px;
+
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.18);
+
+    border: 1px solid rgba(255, 255, 255, 0.8);
 }
 
-.results-section h2 {
-    text-align: center;
-    color: #286b39;
+.result-section h2,
+.recommendation-section h2,
+.location-section h2,
+.followup-section h2 {
+    color: #176b35;
+
+    font-size: 25px;
     margin-bottom: 25px;
+
+    text-align: center;
 }
+
+
+/* =========================================================
+   RESULT GRID
+   ========================================================= */
 
 .result-grid {
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 15px;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
 }
 
 .result-card {
-    background: #f5faf5;
-    border: 1px solid #d9e8da;
-    border-radius: 12px;
-    padding: 20px 10px;
-    text-align: center;
-}
+    background: #f4faf5;
 
-.result-icon {
-    font-size: 28px;
+    border: 1px solid #d5e8d9;
+    border-radius: 15px;
+
+    padding: 20px;
+
+    text-align: center;
 }
 
 .result-card h3 {
+    color: #50715a;
     font-size: 14px;
-    color: #526057;
-    margin: 8px 0;
-}
-
-.result-card p {
-    font-weight: bold;
-    color: #26743a;
-    font-size: 14px;
-}
-
-
-/* ==============================
-   RECOMMENDATION
-   ============================== */
-
-.recommendation-section {
-    background: white;
-    border-radius: 16px;
-    padding: 30px;
-    margin-bottom: 30px;
-    border: 1px solid #d7e5d8;
-}
-
-.recommendation-section h2 {
-    color: #286b39;
-    margin-bottom: 20px;
-}
-
-.recommendation-box {
-    background: #f1f8f1;
-    border-left: 5px solid #3c914d;
-    padding: 20px;
-    border-radius: 8px;
-}
-
-.recommendation-box h3 {
-    color: #2d6f3b;
-    margin-bottom: 8px;
-}
-
-
-/* ==============================
-   LOCATION
-   ============================== */
-
-.location-section {
-    background: white;
-    border-radius: 16px;
-    padding: 30px;
-    text-align: center;
-    margin-bottom: 30px;
-    border: 1px solid #d7e5d8;
-}
-
-.location-section h2 {
-    color: #286b39;
-    margin-bottom: 8px;
-}
-
-.location-section p {
-    color: #68766c;
-    margin-bottom: 15px;
-}
-
-.location-btn {
-    background: #e9f4ea;
-    color: #286b39;
-    border: 1px solid #a9cfae;
-}
-
-
-/* ==============================
-   FOLLOW-UP
-   ============================== */
-
-.followup-section {
-    background: white;
-    border-radius: 16px;
-    padding: 30px;
-    text-align: center;
-    border: 1px solid #d7e5d8;
-}
-
-.followup-section h2 {
-    color: #286b39;
     margin-bottom: 10px;
 }
 
-.followup-section p {
-    color: #68766c;
-    margin-bottom: 18px;
+.result-card p {
+    color: #146b34;
+    font-size: 18px;
+    font-weight: 750;
 }
 
 
-/* ==============================
+/* =========================================================
+   RECOMMENDATION
+   ========================================================= */
+
+.recommendation-box {
+    background: #f2faf3;
+
+    border-left: 5px solid #218742;
+
+    border-radius: 12px;
+
+    padding: 22px;
+
+    color: #385342;
+
+    line-height: 1.7;
+}
+
+
+/* =========================================================
+   LOCATION
+   ========================================================= */
+
+.location-content {
+    text-align: center;
+}
+
+#locationButton {
+    margin-top: 10px;
+}
+
+#locationStatus {
+    margin-top: 15px;
+    color: #587061;
+}
+
+
+/* =========================================================
+   FOLLOW UP
+   ========================================================= */
+
+.followup-content {
+    text-align: center;
+}
+
+.followup-content p {
+    color: #617066;
+    line-height: 1.7;
+    margin-bottom: 20px;
+}
+
+
+/* =========================================================
+   FILE NAME
+   ========================================================= */
+
+#fileName {
+    display: block;
+
+    margin-top: 14px;
+
+    color: #65746a;
+
+    font-size: 14px;
+
+    word-break: break-word;
+}
+
+
+/* =========================================================
+   VOICE STATUS
+   ========================================================= */
+
+#voiceStatus {
+    display: block;
+
+    margin-top: 14px;
+
+    color: #65746a;
+
+    font-size: 14px;
+}
+
+
+/* =========================================================
    FOOTER
-   ============================== */
+   ========================================================= */
 
 footer {
-    background: #174f2c;
-    color: white;
-    text-align: center;
-    padding: 30px 20px;
-}
+    margin-top: 40px;
 
-footer h3 {
-    font-size: 22px;
-    margin-bottom: 5px;
+    background: rgba(4, 31, 16, 0.92);
+
+    color: white;
+
+    text-align: center;
+
+    padding: 35px 20px;
 }
 
 footer p {
-    color: #d7e8da;
-    font-size: 13px;
-    margin: 4px 0;
+    max-width: 650px;
+    margin: 8px auto;
+
+    color: rgba(255, 255, 255, 0.75);
+
+    line-height: 1.6;
 }
 
 
-/* ==============================
-   MOBILE RESPONSIVE
-   ============================== */
+/* =========================================================
+   HIDDEN
+   ========================================================= */
 
-@media (max-width: 800px) {
+.hidden {
+    display: none !important;
+}
 
-    .header {
-        padding: 15px 5%;
+
+/* =========================================================
+   RESPONSIVE - TABLET
+   ========================================================= */
+
+@media (max-width: 900px) {
+
+    .navbar {
+        flex-wrap: wrap;
+        justify-content: center;
+        padding: 15px 0;
     }
 
     nav {
-        display: none;
-    }
-
-    .welcome h2 {
-        font-size: 26px;
+        order: 3;
+        width: 100%;
+        justify-content: center;
     }
 
     .input-section {
@@ -382,26 +530,67 @@ footer p {
     }
 
     .result-grid {
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: repeat(2, 1fr);
     }
 }
 
 
-@media (max-width: 500px) {
+/* =========================================================
+   RESPONSIVE - MOBILE
+   ========================================================= */
 
-    main {
-        padding: 20px 12px 40px;
+@media (max-width: 600px) {
+
+    body {
+        background-attachment: scroll;
     }
 
-    .logo-section h1 {
-        font-size: 24px;
+    main {
+        width: 94%;
+        padding-top: 25px;
+    }
+
+    .logo-image {
+        width: 150px;
+    }
+
+    nav {
+        gap: 18px;
+    }
+
+    nav a {
+        font-size: 14px;
+    }
+
+    .welcome-section {
+        padding: 30px 10px;
+    }
+
+    .welcome-section h1 {
+        font-size: 31px;
+    }
+
+    .welcome-section p {
+        font-size: 15px;
+    }
+
+    .input-card {
+        padding: 30px 20px;
+    }
+
+    .result-section,
+    .recommendation-section,
+    .location-section,
+    .followup-section {
+        padding: 25px 18px;
     }
 
     .result-grid {
         grid-template-columns: 1fr;
     }
 
-    .analyze-btn {
+    #analyzeButton {
         width: 100%;
+        padding: 16px 20px;
     }
 }
