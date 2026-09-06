@@ -1,0 +1,20 @@
+{
+  "welcome": "DocCrop కు స్వాగతం",
+  "upload_first": "దయచేసి ముందుగా పంట చిత్రాన్ని అప్‌లోడ్ చేయండి.",
+  "analyzing": "⏳ విశ్లేషిస్తోంది...",
+  "analyze_crop": "🔍 నా పంటను విశ్లేషించండి",
+  "analysis_ready": "విశ్లేషణ సిద్ధంగా ఉంది",
+  "waiting_ai": "AI ఫలితం కోసం వేచి ఉంది",
+  "processing": "ప్రాసెస్ చేస్తోంది",
+  "recommendation_waiting": "Backend కనెక్ట్ చేసిన తర్వాత AI సిఫార్సు ఇక్కడ కనిపిస్తుంది.",
+  "listening": "వింటోంది... మీ పంట గురించి చెప్పండి.",
+  "you_said": "మీరు చెప్పింది: ",
+  "voice_error": "అర్థం కాలేదు. దయచేసి మళ్లీ ప్రయత్నించండి.",
+  "start_recording": "🎤 రికార్డింగ్ ప్రారంభించండి",
+  "voice_not_supported": "ఈ browserలో voice inputకి మద్దతు లేదు. Google Chrome లేదా Edge ఉపయోగించండి.",
+  "location_not_supported": "Location సేవలకు మద్దతు లేదు.",
+  "getting_location": "📍 మీ స్థానాన్ని పొందుతోంది...",
+  "location_success": "స్థానం విజయవంతంగా గుర్తించబడింది.",
+  "location_error": "స్థానాన్ని పొందలేకపోయాము. దయచేసి GPS permission ఇవ్వండి.",
+  "followup_message": "Follow-up image uploadను తరువాత progress monitoring moduleతో అనుసంధానిస్తాము."
+}

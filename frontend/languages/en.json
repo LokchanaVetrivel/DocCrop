@@ -1,0 +1,20 @@
+{
+  "welcome": "Welcome to DocCrop",
+  "upload_first": "Please upload a crop image first.",
+  "analyzing": "⏳ Analyzing...",
+  "analyze_crop": "🔍 Analyze My Crop",
+  "analysis_ready": "Analysis Ready",
+  "waiting_ai": "Waiting for AI",
+  "processing": "Processing",
+  "recommendation_waiting": "AI recommendation will appear here after connecting the backend.",
+  "listening": "Listening... Speak about your crop.",
+  "you_said": "You said: ",
+  "voice_error": "Unable to understand. Please try again.",
+  "start_recording": "🎤 Start Recording",
+  "voice_not_supported": "Voice input is not supported. Please use Google Chrome or Edge.",
+  "location_not_supported": "Location services are not supported.",
+  "getting_location": "📍 Getting your location...",
+  "location_success": "Location detected successfully.",
+  "location_error": "Unable to access location. Please allow GPS permission.",
+  "followup_message": "Follow-up image upload will be connected to the progress monitoring module."
+}

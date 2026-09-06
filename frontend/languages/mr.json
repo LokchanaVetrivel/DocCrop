@@ -1,0 +1,20 @@
+{
+  "welcome": "DocCrop मध्ये आपले स्वागत आहे",
+  "upload_first": "कृपया प्रथम पिकाचा फोटो अपलोड करा.",
+  "analyzing": "⏳ विश्लेषण सुरू आहे...",
+  "analyze_crop": "🔍 माझ्या पिकाचे विश्लेषण करा",
+  "analysis_ready": "विश्लेषण तयार आहे",
+  "waiting_ai": "AI निकालाची प्रतीक्षा आहे",
+  "processing": "प्रक्रिया सुरू आहे",
+  "recommendation_waiting": "Backend जोडल्यावर AI ची शिफारस येथे दिसेल.",
+  "listening": "ऐकत आहे... आपल्या पिकाबद्दल सांगा.",
+  "you_said": "तुम्ही म्हणालात: ",
+  "voice_error": "समजले नाही. कृपया पुन्हा प्रयत्न करा.",
+  "start_recording": "🎤 रेकॉर्डिंग सुरू करा",
+  "voice_not_supported": "या browser मध्ये voice input समर्थित नाही. Google Chrome किंवा Edge वापरा.",
+  "location_not_supported": "Location सेवा समर्थित नाही.",
+  "getting_location": "📍 तुमचे स्थान मिळवत आहे...",
+  "location_success": "स्थान यशस्वीपणे शोधले.",
+  "location_error": "स्थान मिळवता आले नाही. कृपया GPS permission द्या.",
+  "followup_message": "Follow-up image upload नंतर progress monitoring module शी जोडले जाईल."
+}

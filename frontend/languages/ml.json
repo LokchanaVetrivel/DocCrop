@@ -1,0 +1,20 @@
+{
+  "welcome": "DocCrop-ലേക്ക് സ്വാഗതം",
+  "upload_first": "ദയവായി ആദ്യം വിളയുടെ ചിത്രം അപ്‌ലോഡ് ചെയ്യുക.",
+  "analyzing": "⏳ വിശകലനം ചെയ്യുന്നു...",
+  "analyze_crop": "🔍 എന്റെ വിള വിശകലനം ചെയ്യുക",
+  "analysis_ready": "വിശകലനം തയ്യാറാണ്",
+  "waiting_ai": "AI ഫലത്തിനായി കാത്തിരിക്കുന്നു",
+  "processing": "പ്രോസസ്സ് ചെയ്യുന്നു",
+  "recommendation_waiting": "Backend കണക്റ്റ് ചെയ്ത ശേഷം AI നിർദ്ദേശം ഇവിടെ കാണിക്കും.",
+  "listening": "കേൾക്കുന്നു... നിങ്ങളുടെ വിളയെക്കുറിച്ച് സംസാരിക്കുക.",
+  "you_said": "നിങ്ങൾ പറഞ്ഞത്: ",
+  "voice_error": "മനസ്സിലാക്കാൻ കഴിഞ്ഞില്ല. വീണ്ടും ശ്രമിക്കുക.",
+  "start_recording": "🎤 റെക്കോർഡിംഗ് ആരംഭിക്കുക",
+  "voice_not_supported": "ഈ browser-ൽ voice input പിന്തുണയ്ക്കുന്നില്ല. Google Chrome അല്ലെങ്കിൽ Edge ഉപയോഗിക്കുക.",
+  "location_not_supported": "Location സേവനം പിന്തുണയ്ക്കുന്നില്ല.",
+  "getting_location": "📍 നിങ്ങളുടെ സ്ഥലം കണ്ടെത്തുന്നു...",
+  "location_success": "സ്ഥലം വിജയകരമായി കണ്ടെത്തി.",
+  "location_error": "സ്ഥലം ലഭ്യമാക്കാൻ കഴിഞ്ഞില്ല. GPS permission അനുവദിക്കുക.",
+  "followup_message": "Follow-up image upload പിന്നീട് progress monitoring module-ലേക്ക് ബന്ധിപ്പിക്കും."
+}
