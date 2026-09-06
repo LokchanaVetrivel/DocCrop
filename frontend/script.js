@@ -745,3 +745,27 @@ console.log(
     "🌐 Current language:",
     currentLanguage
 );
+// ===============================
+// Backend Connection Test
+// ===============================
+
+const API_URL = "http://127.0.0.1:8001";
+
+async function testBackendConnection() {
+    try {
+        const response = await fetch(`${API_URL}/health`);
+
+        if (!response.ok) {
+            throw new Error("Backend connection failed");
+        }
+
+        const data = await response.json();
+
+        console.log("DocCrop Backend:", data);
+
+    } catch (error) {
+        console.error("Backend Error:", error);
+    }
+}
+
+testBackendConnection();
