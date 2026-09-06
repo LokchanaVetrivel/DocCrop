@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>DocCrop - Create Account</title>
+
+    <link rel="stylesheet" href="auth.css">
+
+</head>
+
+
+<body>
+
+    <!-- Background Video -->
+
+    <video class="background-video"
+           autoplay
+           muted
+           loop
+           playsinline>
+
+        <source src="assets/background.mp4"
+                type="video/mp4">
+
+    </video>
+
+
+    <div class="video-overlay"></div>
+
+
+    <!-- Create Account -->
+
+    <div class="auth-container">
+
+        <div class="auth-card">
+
+            <div class="logo">
+
+                <div class="logo-icon">
+                    🌱
+                </div>
+
+                <h1>DocCrop</h1>
+
+                <p>Your Crop's Digital Doctor</p>
+
+            </div>
+
+
+            <h2>Create Account</h2>
+
+            <p class="subtitle">
+                Start protecting your crops
+            </p>
+
+
+            <!-- Name -->
+
+            <div class="input-group">
+
+                <label>Full Name</label>
+
+                <input
+                    type="text"
+                    id="name"
+                    placeholder="Enter your name"
+                >
+
+            </div>
+
+
+            <!-- Email -->
+
+            <div class="input-group">
+
+                <label>Email</label>
+
+                <input
+                    type="email"
+                    id="email"
+                    placeholder="Enter your email"
+                >
+
+            </div>
+
+
+            <!-- Phone -->
+
+            <div class="input-group">
+
+                <label>Phone Number</label>
+
+                <input
+                    type="tel"
+                    id="phone"
+                    placeholder="Enter your phone number"
+                >
+
+            </div>
+
+
+            <!-- Password -->
+
+            <div class="input-group">
+
+                <label>Password</label>
+
+                <input
+                    type="password"
+                    id="password"
+                    placeholder="Create a password"
+                >
+
+            </div>
+
+
+            <!-- Create -->
+
+            <button
+                class="auth-button"
+                onclick="createAccount()">
+
+                Create Account
+
+            </button>
+
+
+            <p class="switch-text">
+
+                Already have an account?
+
+                <a href="login.html">
+                    Login
+                </a>
+
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <script src="auth.js"></script>
+
+</body>
+
+</html>

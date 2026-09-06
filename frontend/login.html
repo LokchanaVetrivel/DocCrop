@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>DocCrop - Login</title>
+
+    <link rel="stylesheet" href="auth.css">
+</head>
+
+<body>
+
+    <!-- Background Video -->
+    <!--<video class="background-video"
+           autoplay
+           muted
+           loop
+           playsinline>
+
+        <source src="assets/background_web.mp4"
+                type="video/mp4">
+
+    </video> -->
+    <video class="background-video" autoplay muted loop playsinline>
+    <source src="assets/background_final.mp4" type="video/mp4">
+    </video>
+
+
+    <!-- Dark overlay -->
+    <div class="video-overlay"></div>
+
+
+    <!-- Login Card -->
+    <div class="auth-container">
+
+        <div class="auth-card">
+
+            <div class="logo">
+
+                <div class="logo-icon">
+                    🌱
+                </div>
+
+                <h1>DocCrop</h1>
+
+                <p>Your Crop's Digital Doctor</p>
+
+            </div>
+
+
+            <h2>Welcome Back</h2>
+
+            <p class="subtitle">
+                Login to monitor your crops
+            </p>
+
+
+            <!-- Email -->
+            <div class="input-group">
+
+                <label>Email</label>
+
+                <input
+                    type="email"
+                    id="loginEmail"
+                    placeholder="Enter your email"
+                >
+
+            </div>
+
+
+            <!-- Password -->
+            <div class="input-group">
+
+                <label>Password</label>
+
+                <input
+                    type="password"
+                    id="loginPassword"
+                    placeholder="Enter your password"
+                >
+
+            </div>
+
+
+            <!-- Login -->
+            <button
+                class="auth-button"
+                onclick="login()">
+
+                Login
+
+            </button>
+
+
+            <p class="switch-text">
+
+                Don't have an account?
+
+                <a href="create-account.html">
+                    Create Account
+                </a>
+
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <script src="auth.js"></script>
+
+</body>
+
+</html>
