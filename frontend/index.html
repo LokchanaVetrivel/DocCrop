@@ -1,64 +1,121 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="description"
+        content="DocCrop - AI-powered early detection and management of crop diseases and pest infestations.">
 
     <title>DocCrop - Your Crop's Digital Doctor</title>
 
     <link rel="stylesheet" href="style.css">
 </head>
 
+
 <body>
 
-    <!-- ================= HEADER ================= -->
+    <!-- =====================================================
+         HEADER
+    ====================================================== -->
+
     <header class="header">
 
-        <div class="logo-section">
-            <div class="logo">🌱</div>
+        <div class="navbar">
 
-            <div>
-                <h1>DocCrop</h1>
-                <p>Your Crop's Digital Doctor</p>
+            <!-- OFFICIAL DOCROP LOGO -->
+            <div class="logo-container">
+
+                <img
+                    src="assets/logo.png"
+                    alt="DocCrop - Your Crop's Digital Doctor"
+                    class="logo-image"
+                >
+
             </div>
-        </div>
-        <div class="language-selector">
-        <span>🌐</span>
 
-        <select id="languageSelect">
-        <option value="en">English</option>
-        <option value="ta">தமிழ்</option>
-        <option value="hi">हिन्दी</option>
-        <option value="te">తెలుగు</option>
-        <option value="kn">ಕನ್ನಡ</option>
-        <option value="ml">മലയാളം</option>
-        <option value="mr">मराठी</option>
-        <option value="bn">বাংলা</option>
-        <option value="gu">ગુજરાતી</option>
-        <option value="pa">ਪੰਜਾਬੀ</option>
-        <option value="or">ଓଡ଼ିଆ</option>
-        </select>
-        </div>
 
-        <nav>
-            <a href="#home">Home</a>
-            <a href="#about">About</a>
-            <a href="#help">Help</a>
-        </nav>
+            <!-- LANGUAGE SELECTOR -->
+            <div class="language-wrapper">
+
+                <span>🌐</span>
+
+                <label for="languageSelect" hidden>
+                    Select Language
+                </label>
+
+                <select id="languageSelect">
+
+                    <option value="en">English</option>
+
+                    <option value="ta">தமிழ்</option>
+
+                    <option value="hi">हिन्दी</option>
+
+                    <option value="te">తెలుగు</option>
+
+                    <option value="kn">ಕನ್ನಡ</option>
+
+                    <option value="ml">മലയാളം</option>
+
+                    <option value="mr">मराठी</option>
+
+                    <option value="bn">বাংলা</option>
+
+                    <option value="gu">ગુજરાતી</option>
+
+                    <option value="pa">ਪੰਜਾਬੀ</option>
+
+                    <option value="or">ଓଡ଼ିଆ</option>
+
+                </select>
+
+            </div>
+
+
+            <!-- NAVIGATION -->
+            <nav>
+
+                <a href="#home" data-i18n="home">
+                    Home
+                </a>
+
+                <a href="#about" data-i18n="about">
+                    About
+                </a>
+
+                <a href="#help" data-i18n="help">
+                    Help
+                </a>
+
+            </nav>
+
+        </div>
 
     </header>
 
 
-    <!-- ================= MAIN ================= -->
+
+    <!-- =====================================================
+         MAIN CONTENT
+    ====================================================== -->
+
     <main id="home">
 
-        <!-- Welcome Section -->
-        <section class="welcome">
 
-            <h2>Early Detection. Better Crops.</h2>
+        <!-- =================================================
+             WELCOME / HERO
+        ================================================== -->
 
-            <p>
+        <section class="welcome-section">
+
+            <h1 data-i18n="welcome">
+                Early Detection. Better Crops.
+            </h1>
+
+            <p data-i18n="welcome_description">
                 Detect crop diseases and pests early using
                 AI-powered crop analysis.
             </p>
@@ -66,21 +123,35 @@
         </section>
 
 
-        <!-- ================= INPUT SECTION ================= -->
+
+        <!-- =================================================
+             INPUT SECTION
+        ================================================== -->
+
         <section class="input-section">
 
-            <!-- IMAGE INPUT -->
+
+            <!-- ================= IMAGE INPUT ================= -->
+
             <div class="input-card">
 
-                <div class="icon">📷</div>
+                <div class="icon">
+                    📷
+                </div>
 
-                <h3>Upload Crop Image</h3>
 
-                <p>
+                <h2 data-i18n="upload_crop_image">
+                    Upload Crop Image
+                </h2>
+
+
+                <p data-i18n="upload_description">
                     Take or upload a clear image of the
                     affected leaf or plant.
                 </p>
 
+
+                <!-- Hidden File Input -->
                 <input
                     type="file"
                     id="cropImage"
@@ -88,78 +159,131 @@
                     hidden
                 >
 
+
+                <!-- Choose Image -->
                 <button
+                    type="button"
                     class="primary-btn"
                     onclick="document.getElementById('cropImage').click()"
+                    data-i18n="choose_image"
                 >
                     Choose Image
                 </button>
 
-                <p id="fileName" class="file-name">
+
+                <!-- Selected File -->
+                <span
+                    id="fileName"
+                    data-i18n="no_image"
+                >
                     No image selected
-                </p>
+                </span>
 
             </div>
 
 
-            <!-- VOICE INPUT -->
+
+            <!-- ================= VOICE INPUT ================= -->
+
             <div class="input-card">
 
-                <div class="icon">🎤</div>
+                <div class="icon">
+                    🎤
+                </div>
 
-                <h3>Voice Input</h3>
 
-                <p>
+                <h2 data-i18n="voice_input">
+                    Voice Input
+                </h2>
+
+
+                <p data-i18n="voice_description">
                     Describe the problem with your crop
                     using your voice.
                 </p>
 
+
+                <!-- Voice Button -->
                 <button
+                    type="button"
                     class="secondary-btn"
                     id="voiceButton"
+                    data-i18n="start_recording"
                 >
                     Start Recording
                 </button>
 
-                <p id="voiceStatus" class="voice-status">
+
+                <!-- Voice Status -->
+                <span
+                    id="voiceStatus"
+                    data-i18n="ready"
+                >
                     Ready
-                </p>
+                </span>
 
             </div>
 
         </section>
 
 
-        <!-- ================= ANALYZE BUTTON ================= -->
+
+        <!-- =================================================
+             ANALYZE BUTTON
+        ================================================== -->
+
         <section class="analyze-section">
 
             <button
-                class="analyze-btn"
+                type="button"
                 id="analyzeButton"
             >
-                🔍 Analyze My Crop
+                🔍
+                <span data-i18n="analyze_crop">
+                    Analyze My Crop
+                </span>
             </button>
 
-            <p class="privacy-text">
+
+            <small
+                class="privacy-text"
+                data-i18n="privacy_text"
+            >
                 Your crop information is used only for analysis.
-            </p>
+            </small>
 
         </section>
 
 
-        <!-- ================= RESULT SECTION ================= -->
-        <section class="results-section" id="results">
 
-            <h2>🌿 Crop Analysis Result</h2>
+        <!-- =================================================
+             ANALYSIS RESULTS
+        ================================================== -->
+
+        <section
+            class="result-section"
+            id="results"
+        >
+
+            <h2 data-i18n="crop_analysis_result">
+                🌿 Crop Analysis Result
+            </h2>
+
 
             <div class="result-grid">
 
-                <!-- Disease -->
+
+                <!-- DISEASE -->
+
                 <div class="result-card">
 
-                    <span class="result-icon">🦠</span>
+                    <div class="result-icon">
+                        🦠
+                    </div>
 
-                    <h3>Disease</h3>
+                    <h3 data-i18n="disease">
+                        Disease
+                    </h3>
 
                     <p id="diseaseResult">
                         Waiting for analysis...
@@ -168,12 +292,18 @@
                 </div>
 
 
-                <!-- Confidence -->
+
+                <!-- CONFIDENCE -->
+
                 <div class="result-card">
 
-                    <span class="result-icon">🎯</span>
+                    <div class="result-icon">
+                        🎯
+                    </div>
 
-                    <h3>Confidence</h3>
+                    <h3 data-i18n="confidence">
+                        Confidence
+                    </h3>
 
                     <p id="confidenceResult">
                         —
@@ -182,12 +312,18 @@
                 </div>
 
 
-                <!-- Pest -->
+
+                <!-- PEST -->
+
                 <div class="result-card">
 
-                    <span class="result-icon">🐛</span>
+                    <div class="result-icon">
+                        🐛
+                    </div>
 
-                    <h3>Pest Detection</h3>
+                    <h3 data-i18n="pest_detection">
+                        Pest Detection
+                    </h3>
 
                     <p id="pestResult">
                         —
@@ -196,12 +332,18 @@
                 </div>
 
 
-                <!-- Severity -->
+
+                <!-- SEVERITY -->
+
                 <div class="result-card">
 
-                    <span class="result-icon">📊</span>
+                    <div class="result-icon">
+                        📊
+                    </div>
 
-                    <h3>Severity</h3>
+                    <h3 data-i18n="severity">
+                        Severity
+                    </h3>
 
                     <p id="severityResult">
                         —
@@ -210,12 +352,18 @@
                 </div>
 
 
-                <!-- Risk -->
+
+                <!-- RISK -->
+
                 <div class="result-card">
 
-                    <span class="result-icon">⚠️</span>
+                    <div class="result-icon">
+                        ⚠️
+                    </div>
 
-                    <h3>Risk Level</h3>
+                    <h3 data-i18n="risk_level">
+                        Risk Level
+                    </h3>
 
                     <p id="riskResult">
                         —
@@ -228,16 +376,29 @@
         </section>
 
 
-        <!-- ================= RECOMMENDATION ================= -->
+
+        <!-- =================================================
+             MANAGEMENT RECOMMENDATION
+        ================================================== -->
+
         <section class="recommendation-section">
 
-            <h2>🌱 Management Recommendation</h2>
+            <h2 data-i18n="management_recommendation">
+                🌱 Management Recommendation
+            </h2>
+
 
             <div class="recommendation-box">
 
-                <h3>Recommended Action</h3>
+                <h3 data-i18n="recommended_action">
+                    Recommended Action
+                </h3>
 
-                <p id="recommendationResult">
+
+                <p
+                    id="recommendationResult"
+                    data-i18n="recommendations_after_analysis"
+                >
                     Recommendations will appear after analysis.
                 </p>
 
@@ -246,56 +407,158 @@
         </section>
 
 
-        <!-- ================= LOCATION ================= -->
+
+        <!-- =================================================
+             NEARBY AGRICULTURAL INPUTS
+        ================================================== -->
+
         <section class="location-section">
 
-            <h2>📍 Find Nearby Agricultural Inputs</h2>
+            <h2 data-i18n="nearby_inputs">
+                📍 Find Nearby Agricultural Inputs
+            </h2>
 
-            <p>
-                Find nearby agricultural input shops based
-                on your location.
-            </p>
 
-            <button class="location-btn" id="locationButton">
-                Find Nearby
-            </button>
+            <div class="location-content">
 
-            <p id="locationStatus">
-                Location not selected.
-            </p>
+                <p data-i18n="nearby_inputs_description">
+                    Find nearby agricultural input shops
+                    based on your location.
+                </p>
+
+
+                <button
+                    type="button"
+                    class="secondary-btn"
+                    id="locationButton"
+                    data-i18n="find_nearby"
+                >
+                    Find Nearby
+                </button>
+
+
+                <p
+                    id="locationStatus"
+                    data-i18n="location_not_selected"
+                >
+                    Location not selected.
+                </p>
+
+            </div>
 
         </section>
 
 
-        <!-- ================= FOLLOW UP ================= -->
+
+        <!-- =================================================
+             FOLLOW-UP MONITORING
+        ================================================== -->
+
         <section class="followup-section">
 
-            <h2>🔄 Follow-up Monitoring</h2>
+            <h2 data-i18n="followup_monitoring">
+                🔄 Follow-up Monitoring
+            </h2>
 
-            <p>
-                Upload a new crop image later to compare
-                your crop's progress.
-            </p>
 
-            <button class="secondary-btn">
-                Upload Follow-up Image
-            </button>
+            <div class="followup-content">
+
+                <p data-i18n="followup_description">
+                    Upload a new crop image later to compare
+                    your crop's progress.
+                </p>
+
+
+                <button
+                    type="button"
+                    class="secondary-btn"
+                    data-i18n="upload_followup"
+                >
+                    Upload Follow-up Image
+                </button>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             ABOUT
+        ================================================== -->
+
+        <section
+            class="recommendation-section"
+            id="about"
+        >
+
+            <h2 data-i18n="about_title">
+                🌿 About DocCrop
+            </h2>
+
+
+            <div class="recommendation-box">
+
+                <p data-i18n="about_description">
+                    DocCrop is an AI-powered crop health
+                    assistant designed to support early
+                    detection and management of crop diseases
+                    and pest infestations.
+                </p>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             HELP
+        ================================================== -->
+
+        <section
+            class="location-section"
+            id="help"
+        >
+
+            <h2 data-i18n="help_title">
+                💡 Help
+            </h2>
+
+
+            <div class="location-content">
+
+                <p data-i18n="help_description">
+                    Upload a clear crop image or describe
+                    the problem using voice input, then
+                    select Analyze My Crop.
+                </p>
+
+            </div>
 
         </section>
 
     </main>
 
 
-    <!-- ================= FOOTER ================= -->
+
+    <!-- =====================================================
+         FOOTER
+    ====================================================== -->
+
     <footer>
 
-        <h3>🌱 DocCrop</h3>
+        <h3>
+            DocCrop
+        </h3>
 
-        <p>
+
+        <p data-i18n="footer_tagline">
             Smart Care. Healthy Crop. Better Tomorrow.
         </p>
 
-        <p>
+
+        <p data-i18n="footer_description">
             Early Detection and Management of Crop Diseases
             and Pest Infestations
         </p>
@@ -303,8 +566,13 @@
     </footer>
 
 
-    <!-- JavaScript -->
+
+    <!-- =====================================================
+         JAVASCRIPT
+    ====================================================== -->
+
     <script src="script.js"></script>
 
 </body>
+
 </html>
