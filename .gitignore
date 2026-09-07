@@ -9,3 +9,9 @@ datasets/
 # Python cache
 __pycache__/
 *.pyc
+
+# Environment variables
+.env
+
+# Uploaded images
+backend/uploads/git add .gitignore
