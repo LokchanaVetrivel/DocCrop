@@ -2,11 +2,10 @@ from fastapi import FastAPI, UploadFile, File, HTTPException
 from fastapi.staticfiles import StaticFiles
 from backend.database.database import client, db, farmers_collection
 from passlib.context import CryptContext
+from pydantic import BaseModel
+from datetime import datetime
 import os
 import shutil
-from fastapi import HTTPException
-from datetime import datetime
-import hashlib
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
@@ -16,6 +15,9 @@ app = FastAPI(
     description="AI-powered Crop Disease and Pest Management System",
     version="1.0.0"
 )
+class UserRequest(BaseModel):
+    username: str
+    password: str
 
 # Upload folder
 UPLOAD_FOLDER = "backend/uploads"
@@ -53,6 +55,7 @@ async def analyze_crop(file: UploadFile = File(...)):
     try:
         # Validate uploaded file
         allowed_extensions = [".jpg", ".jpeg", ".png"]
+        MAX_FILE_SIZE = 5 * 1024 * 1024  # 5 MB
 
         file_extension = os.path.splitext(file.filename)[1].lower()
 
@@ -61,6 +64,16 @@ async def analyze_crop(file: UploadFile = File(...)):
                 status_code=400,
                 detail="Only JPG, JPEG, and PNG images are allowed."
             )
+        # Validate file size
+        file_content = await file.read()
+        if len(file_content) > MAX_FILE_SIZE:
+             raise HTTPException(
+                  status_code=400,
+                  detail="File size must be less than 5 MB."
+             )
+
+        # Reset file position
+        await file.seek(0)
 
         # Create unique filename
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
@@ -110,92 +123,88 @@ async def analyze_crop(file: UploadFile = File(...)):
         )
 @app.get("/history")
 def get_history():
-    analyses = list(
-        db["crop_analyses"]
-        .find({}, {"_id": 0})
-        .sort("uploaded_at", -1)
-    )
-
-    for analysis in analyses:
-        filename = os.path.basename(analysis["image"])
-        analysis["image"] = f"/uploads/{filename}"
-
-    return {
-        "status": "success",
-        "count": len(analyses),
-        "history": analyses
-    }
-@app.post("/register")
-def register_user(username: str, password: str):
-
-    print("1. REGISTER API CALLED")
-    print("2. Username:", username)
-
-    # Check whether username already exists
-    existing_user = farmers_collection.find_one({"username": username})
-    print("3. Database check completed")
-
-    if existing_user:
-        return {
-            "status": "error",
-            "message": "Username already exists"
-        }
-
-    print("4. Starting password hashing")
 
     try:
-        hashed_password = pwd_context.hash(password)
-        print("5. Password hashing completed")
-    except Exception as e:
-        print("PASSWORD HASH ERROR:", repr(e))
+        analyses = list(
+            db["crop_analyses"]
+            .find({}, {"_id": 0})
+            .sort("uploaded_at", -1)
+        )
+
+        for analysis in analyses:
+            filename = os.path.basename(analysis["image"])
+            analysis["image"] = f"/uploads/{filename}"
+
         return {
-            "status": "error",
-            "message": str(e)
+            "status": "success",
+            "count": len(analyses),
+            "history": analyses
         }
 
+    except Exception as e:
+        print("HISTORY ERROR:", repr(e))
+
+        raise HTTPException(
+            status_code=500,
+            detail="An error occurred while retrieving analysis history."
+        )
+@app.post("/register")
+def register_user(user: UserRequest):
+
+    # Check whether username already exists
+    existing_user = farmers_collection.find_one(
+        {"username": user.username}
+    )
+
+    if existing_user:
+        raise HTTPException(
+            status_code=400,
+            detail="Username already exists"
+        )
+
+    # Hash password
+    hashed_password = pwd_context.hash(user.password)
+
+    # Create user document
     user_data = {
-        "username": username,
+        "username": user.username,
         "password": hashed_password,
         "created_at": datetime.now()
     }
 
-    print("6. Inserting user into MongoDB")
-
-    try:
-        farmers_collection.insert_one(user_data)
-        print("7. User inserted successfully")
-    except Exception as e:
-        print("MONGODB INSERT ERROR:", repr(e))
-        return {
-            "status": "error",
-            "message": str(e)
-        }
+    # Save user to MongoDB
+    farmers_collection.insert_one(user_data)
 
     return {
         "status": "success",
         "message": "User registered successfully"
     }
 @app.post("/login")
-def login_user(username: str, password: str):
+def login_user(user: UserRequest):
 
     # Find user by username
-    user = farmers_collection.find_one({"username": username})
+    existing_user = farmers_collection.find_one(
+        {"username": user.username}
+    )
 
-    if not user:
-        return {
-            "status": "error",
-            "message": "Invalid username or password"
-        }
+    if not existing_user:
+        raise HTTPException(
+            status_code=401,
+            detail="Invalid username or password"
+        )
 
     # Verify password
-    if not pwd_context.verify(password, user["password"]):
-        return {
-            "status": "error",
-            "message": "Invalid username or password"
-        }
+    if not pwd_context.verify(
+        user.password,
+        existing_user["password"]
+    ):
+        raise HTTPException(
+            status_code=401,
+            detail="Invalid username or password"
+        )
 
     return {
         "status": "success",
         "message": "Login successful",
-        "username": username
+        "username": user.username
     }
