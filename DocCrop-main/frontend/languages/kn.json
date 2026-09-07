@@ -1,0 +1,20 @@
+{
+  "welcome": "DocCrop ಗೆ ಸ್ವಾಗತ",
+  "upload_first": "ದಯವಿಟ್ಟು ಮೊದಲು ಬೆಳೆ ಚಿತ್ರದನ್ನು ಅಪ್‌ಲೋಡ್ ಮಾಡಿ.",
+  "analyzing": "⏳ ವಿಶ್ಲೇಷಿಸಲಾಗುತ್ತಿದೆ...",
+  "analyze_crop": "🔍 ನನ್ನ ಬೆಳೆಯನ್ನು ವಿಶ್ಲೇಷಿಸಿ",
+  "analysis_ready": "ವಿಶ್ಲೇಷಣೆ ಸಿದ್ಧವಾಗಿದೆ",
+  "waiting_ai": "AI ಫಲಿತಾಂಶಕ್ಕಾಗಿ ಕಾಯುತ್ತಿದೆ",
+  "processing": "ಪ್ರಕ್ರಿಯೆ ನಡೆಯುತ್ತಿದೆ",
+  "recommendation_waiting": "Backend ಸಂಪರ್ಕಿಸಿದ ನಂತರ AI ಶಿಫಾರಸು ಇಲ್ಲಿ ಕಾಣಿಸುತ್ತದೆ.",
+  "listening": "ಕೇಳುತ್ತಿದೆ... ನಿಮ್ಮ ಬೆಳೆಯ ಬಗ್ಗೆ ಮಾತನಾಡಿ.",
+  "you_said": "ನೀವು ಹೇಳಿದ್ದು: ",
+  "voice_error": "ಅರ್ಥವಾಗಲಿಲ್ಲ. ದಯವಿಟ್ಟು ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ.",
+  "start_recording": "🎤 ರೆಕಾರ್ಡಿಂಗ್ ಪ್ರಾರಂಭಿಸಿ",
+  "voice_not_supported": "ಈ browserನಲ್ಲಿ voice input ಬೆಂಬಲಿತವಾಗಿಲ್ಲ. Google Chrome ಅಥವಾ Edge ಬಳಸಿ.",
+  "location_not_supported": "Location ಸೇವೆಗಳು ಬೆಂಬಲಿತವಾಗಿಲ್ಲ.",
+  "getting_location": "📍 ನಿಮ್ಮ ಸ್ಥಳವನ್ನು ಪಡೆಯಲಾಗುತ್ತಿದೆ...",
+  "location_success": "ಸ್ಥಳವನ್ನು ಯಶಸ್ವಿಯಾಗಿ ಗುರುತಿಸಲಾಗಿದೆ.",
+  "location_error": "ಸ್ಥಳವನ್ನು ಪಡೆಯಲು ಸಾಧ್ಯವಾಗಲಿಲ್ಲ. ದಯವಿಟ್ಟು GPS permission ನೀಡಿ.",
+  "followup_message": "Follow-up image upload ಅನ್ನು ನಂತರ progress monitoring moduleಗೆ ಸಂಪರ್ಕಿಸಲಾಗುತ್ತದೆ."
+}

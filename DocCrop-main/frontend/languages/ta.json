@@ -1,0 +1,20 @@
+{
+  "welcome": "DocCrop-க்கு வரவேற்கிறோம்",
+  "upload_first": "முதலில் பயிரின் படத்தை பதிவேற்றவும்.",
+  "analyzing": "⏳ பகுப்பாய்வு செய்கிறது...",
+  "analyze_crop": "🔍 எனது பயிரை பகுப்பாய்வு செய்க",
+  "analysis_ready": "பகுப்பாய்வு தயார்",
+  "waiting_ai": "AI முடிவுக்காக காத்திருக்கிறது",
+  "processing": "செயலாக்கப்படுகிறது",
+  "recommendation_waiting": "Backend இணைக்கப்பட்ட பிறகு AI பரிந்துரை இங்கே தோன்றும்.",
+  "listening": "கேட்கிறது... உங்கள் பயிரைப் பற்றி பேசுங்கள்.",
+  "you_said": "நீங்கள் கூறியது: ",
+  "voice_error": "புரிந்துகொள்ள முடியவில்லை. மீண்டும் முயற்சிக்கவும்.",
+  "start_recording": "🎤 பதிவு செய்யத் தொடங்குங்கள்",
+  "voice_not_supported": "Voice input இந்த browser-ல் ஆதரிக்கப்படவில்லை. Google Chrome அல்லது Edge பயன்படுத்தவும்.",
+  "location_not_supported": "Location சேவை ஆதரிக்கப்படவில்லை.",
+  "getting_location": "📍 உங்கள் இருப்பிடத்தைப் பெறுகிறது...",
+  "location_success": "இருப்பிடம் வெற்றிகரமாக கண்டறியப்பட்டது.",
+  "location_error": "இருப்பிடத்தை அணுக முடியவில்லை. GPS permission-ஐ அனுமதிக்கவும்.",
+  "followup_message": "Progress monitoring module-க்கு follow-up image upload பின்னர் இணைக்கப்படும்."
+}
