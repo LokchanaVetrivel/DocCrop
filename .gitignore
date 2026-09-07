@@ -1,4 +1,11 @@
-.venv/
+# Large local datasets
+datasets/
+
+# Trained model weights
+*.pt
+*.onnx
+*.keras
+
+# Python cache
 __pycache__/
 *.pyc
-*.keras
