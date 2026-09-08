@@ -1,11 +1,13 @@
 from fastapi import FastAPI, UploadFile, File, HTTPException
 from fastapi.staticfiles import StaticFiles
 from backend.database.database import client, db, farmers_collection
+from backend.services.pest_detection import detect_pests_with_severity
 from passlib.context import CryptContext
 from pydantic import BaseModel
 from datetime import datetime
 import os
 import shutil
+
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
@@ -15,16 +17,24 @@ app = FastAPI(
     description="AI-powered Crop Disease and Pest Management System",
     version="1.0.0"
 )
+
+
 class UserRequest(BaseModel):
     username: str
     password: str
+
 
 # Upload folder
 UPLOAD_FOLDER = "backend/uploads"
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
+
 # Serve uploaded images
-app.mount("/uploads", StaticFiles(directory=UPLOAD_FOLDER), name="uploads")
+app.mount(
+    "/uploads",
+    StaticFiles(directory=UPLOAD_FOLDER),
+    name="uploads"
+)
 
 
 @app.get("/")
@@ -38,16 +48,19 @@ def home():
 def health_check():
     try:
         client.admin.command("ping")
+
         return {
             "status": "success",
             "mongodb": "connected"
         }
+
     except Exception as e:
         return {
             "status": "error",
             "mongodb": "disconnected",
             "error": str(e)
         }
+
 
 @app.post("/analyze")
 async def analyze_crop(file: UploadFile = File(...)):
@@ -64,13 +77,15 @@ async def analyze_crop(file: UploadFile = File(...)):
                 status_code=400,
                 detail="Only JPG, JPEG, and PNG images are allowed."
             )
+
         # Validate file size
         file_content = await file.read()
+
         if len(file_content) > MAX_FILE_SIZE:
-             raise HTTPException(
-                  status_code=400,
-                  detail="File size must be less than 5 MB."
-             )
+            raise HTTPException(
+                status_code=400,
+                detail="File size must be less than 5 MB."
+            )
 
         # Reset file position
         await file.seek(0)
@@ -79,31 +94,99 @@ async def analyze_crop(file: UploadFile = File(...)):
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         filename = f"{timestamp}_{file.filename}"
 
-        file_path = os.path.join(UPLOAD_FOLDER, filename)
+        file_path = os.path.join(
+            UPLOAD_FOLDER,
+            filename
+        )
 
         # Save uploaded image
         with open(file_path, "wb") as buffer:
             shutil.copyfileobj(file.file, buffer)
 
-        # Temporary demo result
+        # ==========================================
+        # PEST DETECTION + SEVERITY DETECTION
+        # ==========================================
+
+        pest_result = detect_pests_with_severity(
+            file_path,
+            confidence=0.25
+        )
+
+        detections = pest_result["detections"]
+        severity_result = pest_result["severity"]
+
+        # ==========================================
+        # FORMAT PEST RESULT
+        # ==========================================
+
+        if detections:
+
+            pest_names = list(
+                dict.fromkeys(
+                    detection["pest_name"]
+                    for detection in detections
+                )
+            )
+
+            pest = ", ".join(pest_names)
+
+        else:
+            pest = "No Major Pest Detected"
+
+        # ==========================================
+        # FINAL RESULT
+        # ==========================================
+
         result = {
+
+            # Temporary disease result
             "disease": "Leaf Blight",
             "confidence": 94,
-            "pest": "No Major Pest Detected",
-            "severity": "Moderate",
+
+            # Actual pest detection
+            "pest": pest,
+
+            # Actual severity estimation
+            "severity": severity_result["severity"],
+
+            # Temporary risk result
             "risk": "High",
-            "recommendation": "Follow Integrated Pest Management (IPM) practices."
+
+            # Temporary recommendation
+            "recommendation":
+                "Follow Integrated Pest Management (IPM) practices.",
+
+            # Pest information
+            "pest_count": severity_result["pest_count"],
+
+            "affected_area_percentage":
+                severity_result["affected_area_percentage"],
+
+            "pest_detections": detections
         }
 
-        # Save analysis in MongoDB
+        # ==========================================
+        # SAVE ANALYSIS IN MONGODB
+        # ==========================================
+
         analysis_data = {
+
             "image": file_path,
+
             "filename": file.filename,
+
             "uploaded_at": datetime.now(),
+
             **result
         }
 
-        db["crop_analyses"].insert_one(analysis_data)
+        db["crop_analyses"].insert_one(
+            analysis_data
+        )
+
+        # ==========================================
+        # API RESPONSE
+        # ==========================================
 
         return {
             "status": "success",
@@ -115,16 +198,23 @@ async def analyze_crop(file: UploadFile = File(...)):
         raise
 
     except Exception as e:
-        print("ANALYZE ERROR:", repr(e))
+
+        print(
+            "ANALYZE ERROR:",
+            repr(e)
+        )
 
         raise HTTPException(
             status_code=500,
             detail="An error occurred while processing the crop image."
         )
+
+
 @app.get("/history")
 def get_history():
 
     try:
+
         analyses = list(
             db["crop_analyses"]
             .find({}, {"_id": 0})
@@ -132,7 +222,11 @@ def get_history():
         )
 
         for analysis in analyses:
-            filename = os.path.basename(analysis["image"])
+
+            filename = os.path.basename(
+                analysis["image"]
+            )
+
             analysis["image"] = f"/uploads/{filename}"
 
         return {
@@ -142,12 +236,18 @@ def get_history():
         }
 
     except Exception as e:
-        print("HISTORY ERROR:", repr(e))
+
+        print(
+            "HISTORY ERROR:",
+            repr(e)
+        )
 
         raise HTTPException(
             status_code=500,
             detail="An error occurred while retrieving analysis history."
         )
+
+
 @app.post("/register")
 def register_user(user: UserRequest):
 
@@ -163,7 +263,9 @@ def register_user(user: UserRequest):
         )
 
     # Hash password
-    hashed_password = pwd_context.hash(user.password)
+    hashed_password = pwd_context.hash(
+        user.password
+    )
 
     # Create user document
     user_data = {
@@ -173,12 +275,16 @@ def register_user(user: UserRequest):
     }
 
     # Save user to MongoDB
-    farmers_collection.insert_one(user_data)
+    farmers_collection.insert_one(
+        user_data
+    )
 
     return {
         "status": "success",
         "message": "User registered successfully"
     }
+
+
 @app.post("/login")
 def login_user(user: UserRequest):
 
