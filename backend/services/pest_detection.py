@@ -1,27 +1,41 @@
 from pathlib import Path
-
 from ultralytics import YOLO
 
 from backend.services.severity import calculate_severity
 
 
+# Project root directory
 BASE_DIR = Path(__file__).resolve().parents[2]
 
+
+# Trained 10-class rice pest detection model
 MODEL_PATH = (
     BASE_DIR
     / "runs"
     / "detect"
     / "runs"
     / "pest_detection"
-    / "balanced_test"
+    / "rice_10class_test"
     / "weights"
     / "best.pt"
 )
 
+
+# Load model once when backend starts
 model = YOLO(str(MODEL_PATH))
 
 
-def detect_pests(image_path, confidence=0.25):
+def detect_pests(image_path, confidence=0.15):
+    """
+    Detect rice pests from an input image.
+
+    Returns:
+        List of detected pests with:
+        - pest name
+        - confidence
+        - bounding box
+    """
+
     results = model.predict(
         source=image_path,
         conf=confidence,
@@ -59,7 +73,10 @@ def detect_pests(image_path, confidence=0.25):
     return detections
 
 
-def detect_pests_with_severity(image_path, confidence=0.25):
+def detect_pests_with_severity(image_path, confidence=0.15):
+    """
+    Detect pests and calculate estimated infestation severity.
+    """
 
     results = model.predict(
         source=image_path,
@@ -98,6 +115,8 @@ def detect_pests_with_severity(image_path, confidence=0.25):
                 ]
             })
 
+    # Calculate severity from pest count
+    # and total bounding-box affected area
     severity_result = calculate_severity(
         detections,
         image_width,

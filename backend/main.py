@@ -109,8 +109,8 @@ async def analyze_crop(file: UploadFile = File(...)):
 
         pest_result = detect_pests_with_severity(
             file_path,
-            confidence=0.25
-        )
+            confidence=0.15
+            )
 
         detections = pest_result["detections"]
         severity_result = pest_result["severity"]
