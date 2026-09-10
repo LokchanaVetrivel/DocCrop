@@ -1,0 +1,68 @@
+{
+  "Apple": [
+    "Apple scab",
+    "Black rot",
+    "Cedar apple rust",
+    "Healthy"
+  ],
+  "Blueberry": [
+    "Healthy"
+  ],
+  "Cherry": [
+    "Powdery mildew",
+    "Healthy"
+  ],
+  "Corn (maize)": [
+    "Cercospora leaf spot / Gray leaf spot",
+    "Common rust",
+    "Healthy",
+    "Northern Leaf Blight"
+  ],
+  "Grape": [
+    "Black rot",
+    "Esca (Black Measles)",
+    "Leaf blight (Isariopsis Leaf Spot)",
+    "Healthy"
+  ],
+  "Orange": [
+    "Haunglongbing (Citrus greening)"
+  ],
+  "Peach": [
+    "Bacterial spot",
+    "Healthy"
+  ],
+  "Pepper, bell": [
+    "Bacterial spot",
+    "Healthy"
+  ],
+  "Potato": [
+    "Early blight",
+    "Late blight",
+    "Healthy"
+  ],
+  "Raspberry": [
+    "Healthy"
+  ],
+  "Soybean": [
+    "Healthy"
+  ],
+  "Squash": [
+    "Powdery mildew"
+  ],
+  "Strawberry": [
+    "Leaf scorch",
+    "Healthy"
+  ],
+  "Tomato": [
+    "Bacterial spot",
+    "Early blight",
+    "Late blight",
+    "Leaf Mold",
+    "Septoria leaf spot",
+    "Spider mites Two-spotted spider mite",
+    "Target Spot",
+    "Tomato Yellow Leaf Curl Virus",
+    "Tomato mosaic virus",
+    "Healthy"
+  ]
+}

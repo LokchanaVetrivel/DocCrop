@@ -1,0 +1,70 @@
+{
+  "Apple": [
+    "Aphids",
+    "Apple maggot",
+    "Codling moth"
+  ],
+  "Blueberry": [
+    "Aphids",
+    "Fruit flies"
+  ],
+  "Cherry": [
+    "Aphids",
+    "Cherry fruit fly"
+  ],
+  "Corn (maize)": [
+    "Fall armyworm",
+    "Corn earworm",
+    "Stem borer"
+  ],
+  "Grape": [
+    "Grape mealybug",
+    "Thrips",
+    "Leafhopper"
+  ],
+  "Orange": [
+    "Asian citrus psyllid",
+    "Citrus leafminer"
+  ],
+  "Peach": [
+    "Peach aphid",
+    "Oriental fruit moth"
+  ],
+  "Pepper, bell": [
+    "Aphids",
+    "Thrips",
+    "Whitefly"
+  ],
+  "Potato": [
+    "Colorado potato beetle",
+    "Potato tuber moth",
+    "Aphids"
+  ],
+  "Raspberry": [
+    "Aphids",
+    "Spider mites"
+  ],
+  "Soybean": [
+    "Soybean aphid",
+    "Bean leaf beetle",
+    "Whitefly"
+  ],
+  "Squash": [
+    "Squash bug",
+    "Squash vine borer",
+    "Aphids"
+  ],
+  "Strawberry": [
+    "Two-spotted spider mite",
+    "Aphids",
+    "Thrips"
+  ],
+  "Tomato": [
+    "Whitefly",
+    "Aphids",
+    "Thrips",
+    "Fruit borer",
+    "Leaf miner",
+    "Spider mites"
+  ]
+}
