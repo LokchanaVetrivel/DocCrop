@@ -1,104 +1,144 @@
 import tensorflow as tf
 import numpy as np
+import json
 
 from tensorflow.keras import layers, models
 from tensorflow.keras.applications import MobileNetV2
-from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
+from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint, ReduceLROnPlateau
 from pathlib import Path
 
 
-# =========================
-# 1. Paths
-# =========================
+# ============================================================
+# 1. PATHS
+# ============================================================
 
 DATASET_DIR = Path(
-    r"C:\Users\thiru\OneDrive\Documents\potato_dataset\Potato Leaf Disease Dataset in Uncontrolled Environment"
+    r"C:\Users\Keerthana M\OneDrive\Documents\Plant Disease Detection and Remedy System\dataset\PlantVillage\PlantVillage"
 )
 
+TRAIN_DIR = DATASET_DIR / "train"
+VAL_DIR = DATASET_DIR / "val"
+
 MODEL_PATH = Path("disease_mobilenetv2.keras")
+CLASS_NAMES_PATH = Path("disease_class_names.json")
 
 
-# =========================
-# 2. Settings
-# =========================
+# ============================================================
+# 2. SETTINGS
+# ============================================================
 
 IMG_SIZE = (224, 224)
-BATCH_SIZE = 16
+BATCH_SIZE = 32
 SEED = 42
 
 
-# =========================
-# 3. Load Dataset
-# =========================
+# ============================================================
+# 3. CHECK DATASET PATHS
+# ============================================================
 
-train_dataset = tf.keras.utils.image_dataset_from_directory(
-    DATASET_DIR,
-    validation_split=0.2,
-    subset="training",
-    seed=SEED,
-    image_size=IMG_SIZE,
-    batch_size=BATCH_SIZE
-)
+print("\n========================================")
+print("Checking Dataset")
+print("========================================")
 
-validation_dataset = tf.keras.utils.image_dataset_from_directory(
-    DATASET_DIR,
-    validation_split=0.2,
-    subset="validation",
-    seed=SEED,
-    image_size=IMG_SIZE,
-    batch_size=BATCH_SIZE
-)
+print("Train directory:", TRAIN_DIR)
+print("Validation directory:", VAL_DIR)
 
+if not TRAIN_DIR.exists():
+    raise FileNotFoundError(
+        f"Training directory not found:\n{TRAIN_DIR}"
+    )
 
-class_names = train_dataset.class_names
-
-print("\nClasses:")
-for i, name in enumerate(class_names):
-    print(i, "->", name)
-
-
-# =========================
-# 3A. Class Weights
-# =========================
-
-class_counts = {}
-
-for class_name in class_names:
-    class_dir = DATASET_DIR / class_name
-
-    image_files = [
-        file for file in class_dir.iterdir()
-        if file.is_file()
-    ]
-
-    class_counts[class_name] = len(image_files)
-
-
-total_samples = sum(class_counts.values())
-num_classes = len(class_names)
-
-class_weights = {}
-
-for i, class_name in enumerate(class_names):
-    class_weights[i] = (
-        total_samples /
-        (num_classes * class_counts[class_name])
+if not VAL_DIR.exists():
+    raise FileNotFoundError(
+        f"Validation directory not found:\n{VAL_DIR}"
     )
 
 
-print("\nClass Counts:")
-for class_name, count in class_counts.items():
-    print(class_name, "->", count)
+# ============================================================
+# 4. LOAD TRAINING DATASET
+# ============================================================
+
+print("\n========================================")
+print("Loading Training Dataset")
+print("========================================")
+
+train_dataset = tf.keras.utils.image_dataset_from_directory(
+    TRAIN_DIR,
+    labels="inferred",
+    label_mode="int",
+    image_size=IMG_SIZE,
+    batch_size=BATCH_SIZE,
+    shuffle=True,
+    seed=SEED
+)
 
 
-print("\nClass Weights:")
-for i, weight in class_weights.items():
-    print(class_names[i], "->", round(weight, 2))
+# ============================================================
+# 5. LOAD VALIDATION DATASET
+# ============================================================
+
+print("\n========================================")
+print("Loading Validation Dataset")
+print("========================================")
+
+validation_dataset = tf.keras.utils.image_dataset_from_directory(
+    VAL_DIR,
+    labels="inferred",
+    label_mode="int",
+    image_size=IMG_SIZE,
+    batch_size=BATCH_SIZE,
+    shuffle=False
+)
 
 
-# =========================
-# 4. Improve Dataset Performance
-# =========================
+# ============================================================
+# 6. CLASS NAMES
+# ============================================================
+
+class_names = train_dataset.class_names
+
+print("\n========================================")
+print("Classes")
+print("========================================")
+
+for i, name in enumerate(class_names):
+    print(f"{i:2d} -> {name}")
+
+num_classes = len(class_names)
+
+print("\nTotal Classes:", num_classes)
+
+
+# ============================================================
+# 7. VERIFY TRAIN / VALIDATION CLASSES
+# ============================================================
+
+validation_class_names = validation_dataset.class_names
+
+if class_names != validation_class_names:
+    raise ValueError(
+        "Training and validation classes do not match!"
+    )
+
+if num_classes != 38:
+    print(
+        f"\nWARNING: Expected 38 classes, but found {num_classes}."
+    )
+
+
+# ============================================================
+# 8. SAVE CLASS NAMES
+# ============================================================
+
+with open(CLASS_NAMES_PATH, "w", encoding="utf-8") as f:
+    json.dump(class_names, f, indent=4)
+
+print("\nClass names saved to:", CLASS_NAMES_PATH)
+
+
+# ============================================================
+# 9. DATASET PERFORMANCE
+# ============================================================
 
 AUTOTUNE = tf.data.AUTOTUNE
 
@@ -106,20 +146,25 @@ train_dataset = train_dataset.prefetch(AUTOTUNE)
 validation_dataset = validation_dataset.prefetch(AUTOTUNE)
 
 
-# =========================
-# 5. Data Augmentation
-# =========================
+# ============================================================
+# 10. DATA AUGMENTATION
+# ============================================================
 
 data_augmentation = tf.keras.Sequential([
     layers.RandomFlip("horizontal"),
     layers.RandomRotation(0.1),
     layers.RandomZoom(0.1),
+    layers.RandomContrast(0.1),
 ])
 
 
-# =========================
-# 6. MobileNetV2 Base Model
-# =========================
+# ============================================================
+# 11. MOBILE NET V2 BASE MODEL
+# ============================================================
+
+print("\n========================================")
+print("Loading MobileNetV2")
+print("========================================")
 
 base_model = MobileNetV2(
     input_shape=(224, 224, 3),
@@ -127,37 +172,47 @@ base_model = MobileNetV2(
     weights="imagenet"
 )
 
-# Initially freeze pretrained layers
+# Freeze pretrained layers initially
 base_model.trainable = False
 
 
-# =========================
-# 7. Build Model
-# =========================
+# ============================================================
+# 12. BUILD MODEL
+# ============================================================
 
-inputs = layers.Input(shape=(224, 224, 3))
+inputs = layers.Input(
+    shape=(224, 224, 3),
+    name="plant_image"
+)
 
 x = data_augmentation(inputs)
 
 x = tf.keras.applications.mobilenet_v2.preprocess_input(x)
 
-x = base_model(x, training=False)
+x = base_model(
+    x,
+    training=False
+)
 
 x = layers.GlobalAveragePooling2D()(x)
 
 x = layers.Dropout(0.3)(x)
 
 outputs = layers.Dense(
-    len(class_names),
-    activation="softmax"
+    num_classes,
+    activation="softmax",
+    name="disease_prediction"
 )(x)
 
-model = models.Model(inputs, outputs)
+model = models.Model(
+    inputs=inputs,
+    outputs=outputs
+)
 
 
-# =========================
-# 8. Compile
-# =========================
+# ============================================================
+# 13. COMPILE MODEL
+# ============================================================
 
 model.compile(
     optimizer=tf.keras.optimizers.Adam(
@@ -168,17 +223,22 @@ model.compile(
 )
 
 
+# ============================================================
+# 14. MODEL SUMMARY
+# ============================================================
+
 model.summary()
 
 
-# =========================
-# 9. Callbacks
-# =========================
+# ============================================================
+# 15. CALLBACKS
+# ============================================================
 
 early_stopping = EarlyStopping(
     monitor="val_accuracy",
     patience=3,
-    restore_best_weights=True
+    restore_best_weights=True,
+    verbose=1
 )
 
 checkpoint = ModelCheckpoint(
@@ -188,43 +248,49 @@ checkpoint = ModelCheckpoint(
     verbose=1
 )
 
+reduce_lr = ReduceLROnPlateau(
+    monitor="val_loss",
+    factor=0.2,
+    patience=2,
+    min_lr=1e-7,
+    verbose=1
+)
 
-# =========================
-# 10. Initial Training
-# =========================
 
-print("\n==============================")
-print("Starting Initial Training")
-print("==============================")
+# ============================================================
+# 16. INITIAL TRAINING
+# ============================================================
 
-EPOCHS = 15
+print("\n========================================")
+print("STARTING INITIAL TRAINING")
+print("========================================")
+
+INITIAL_EPOCHS = 10
 
 history = model.fit(
     train_dataset,
     validation_data=validation_dataset,
-    epochs=EPOCHS,
-    class_weight=class_weights,
+    epochs=INITIAL_EPOCHS,
     callbacks=[
         early_stopping,
-        checkpoint
+        checkpoint,
+        reduce_lr
     ]
 )
 
 
-# =========================
-# 11. Fine-Tuning
-# =========================
+# ============================================================
+# 17. FINE-TUNING
+# ============================================================
 
-print("\n==============================")
-print("Starting Fine-Tuning")
-print("==============================")
+print("\n========================================")
+print("STARTING FINE-TUNING")
+print("========================================")
 
-
-# Unfreeze MobileNetV2
 base_model.trainable = True
 
 
-# Freeze most layers
+# Freeze most MobileNetV2 layers
 for layer in base_model.layers[:-30]:
     layer.trainable = False
 
@@ -248,14 +314,22 @@ model.compile(
 fine_tune_early_stopping = EarlyStopping(
     monitor="val_accuracy",
     patience=3,
-    restore_best_weights=True
+    restore_best_weights=True,
+    verbose=1
 )
-
 
 fine_tune_checkpoint = ModelCheckpoint(
     MODEL_PATH,
     monitor="val_accuracy",
     save_best_only=True,
+    verbose=1
+)
+
+fine_tune_reduce_lr = ReduceLROnPlateau(
+    monitor="val_loss",
+    factor=0.2,
+    patience=2,
+    min_lr=1e-8,
     verbose=1
 )
 
@@ -266,23 +340,38 @@ history_fine = model.fit(
     train_dataset,
     validation_data=validation_dataset,
     epochs=FINE_TUNE_EPOCHS,
-    class_weight=class_weights,
     callbacks=[
         fine_tune_early_stopping,
-        fine_tune_checkpoint
+        fine_tune_checkpoint,
+        fine_tune_reduce_lr
     ]
 )
 
 
-# =========================
-# 12. Save Final Model
-# =========================
+# ============================================================
+# 18. SAVE FINAL MODEL
+# ============================================================
 
 model.save(MODEL_PATH)
 
-print("\n================================")
-print("Model saved successfully!")
-print("================================")
 
-print("Model:", MODEL_PATH)
-print("Classes:", class_names)
+# ============================================================
+# 19. FINAL INFORMATION
+# ============================================================
+
+print("\n========================================")
+print("TRAINING COMPLETED")
+print("========================================")
+
+print("Model saved:", MODEL_PATH)
+print("Class names saved:", CLASS_NAMES_PATH)
+print("Number of classes:", num_classes)
+
+print("\nClasses:")
+
+for i, name in enumerate(class_names):
+    print(i, "->", name)
+
+print("\n========================================")
+print("DONE")
+print("========================================")

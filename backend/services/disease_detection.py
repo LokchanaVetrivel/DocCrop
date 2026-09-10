@@ -1,23 +1,18 @@
 from pathlib import Path
+import json
 
 import numpy as np
 from PIL import Image
 from tensorflow.keras.models import load_model
 
 
-MODEL_PATH = Path(__file__).resolve().parents[2] / "disease_mobilenetv2.keras"
+BASE_DIR = Path(__file__).resolve().parents[2]
 
-CLASS_NAMES = [
-    "Bacteria",
-    "Fungi",
-    "Healthy",
-    "Nematode",
-    "Pest",
-    "Phytopthora",
-    "Virus"
-]
+MODEL_PATH = BASE_DIR / "disease_mobilenetv2.keras"
+CLASS_NAMES_PATH = BASE_DIR / "disease_class_names.json"
 
 _model = None
+_class_names = None
 
 
 def _get_model():
@@ -27,6 +22,16 @@ def _get_model():
         _model = load_model(MODEL_PATH)
 
     return _model
+
+
+def _get_class_names():
+    global _class_names
+
+    if _class_names is None:
+        with open(CLASS_NAMES_PATH, "r", encoding="utf-8") as f:
+            _class_names = json.load(f)
+
+    return _class_names
 
 
 def detect_disease(image_path):
@@ -42,13 +47,16 @@ def detect_disease(image_path):
     image_array = np.expand_dims(image_array, axis=0)
 
     model = _get_model()
+    class_names = _get_class_names()
 
     predictions = model.predict(image_array, verbose=0)[0]
 
     predicted_index = int(np.argmax(predictions))
     confidence = float(predictions[predicted_index]) * 100
 
+    predicted_class = class_names[predicted_index]
+
     return {
-        "disease": CLASS_NAMES[predicted_index],
+        "disease": predicted_class,
         "confidence": round(confidence, 2)
     }
