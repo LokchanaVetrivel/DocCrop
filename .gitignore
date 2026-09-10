@@ -14,4 +14,4 @@ __pycache__/
 .env
 
 # Uploaded images
-backend/uploads/git add .gitignore
+backend/uploads/
