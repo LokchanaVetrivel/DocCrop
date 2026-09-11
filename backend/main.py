@@ -1,121 +1,180 @@
-from fastapi import FastAPI, UploadFile, File, HTTPException
-from fastapi.staticfiles import StaticFiles
-from backend.database.database import client, db, farmers_collection
-from backend.services.pest_detection import detect_pests_with_severity
-from backend.services.recommendation import generate_recommendation
-from passlib.context import CryptContext
-from pydantic import BaseModel
-from datetime import datetime
 import os
 import shutil
+from datetime import datetime
 
+from fastapi import FastAPI, File, UploadFile, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+from backend.services.pest_detection import detect_pests_with_severity
+from backend.services.recommendation import generate_recommendation
 
+# ============================================================
+# APP INITIALIZATION
+# ============================================================
 
 app = FastAPI(
     title="DocCrop API",
-    description="AI-powered Crop Disease and Pest Management System",
+    description="AI-based crop disease, pest detection and recommendation system",
     version="1.0.0"
 )
 
+# ============================================================
+# CORS
+# ============================================================
 
-class UserRequest(BaseModel):
-    username: str
-    password: str
-
-
-# Upload folder
-UPLOAD_FOLDER = "backend/uploads"
-os.makedirs(UPLOAD_FOLDER, exist_ok=True)
-
-
-# Serve uploaded images
-app.mount(
-    "/uploads",
-    StaticFiles(directory=UPLOAD_FOLDER),
-    name="uploads"
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
+# ============================================================
+# MONGODB
+# ============================================================
+
+try:
+    from pymongo import MongoClient
+
+    MONGO_URL = "mongodb://localhost:27017"
+
+    client = MongoClient(
+        MONGO_URL,
+        serverSelectionTimeoutMS=3000
+    )
+
+    client.admin.command("ping")
+
+    db = client["doccrop"]
+
+    print("MongoDB connected successfully!")
+
+except Exception as e:
+    print("MongoDB connection failed:", repr(e))
+    db = None
+
+# ============================================================
+# UPLOAD FOLDER
+# ============================================================
+
+BASE_DIR = os.path.dirname(
+    os.path.abspath(__file__)
+)
+
+UPLOAD_FOLDER = os.path.join(
+    BASE_DIR,
+    "uploads"
+)
+
+os.makedirs(
+    UPLOAD_FOLDER,
+    exist_ok=True
+)
+
+# ============================================================
+# BASIC ROOT ENDPOINT
+# ============================================================
 
 @app.get("/")
-def home():
+def root():
     return {
-        "message": "DocCrop API is running!"
+        "status": "success",
+        "message": "DocCrop API is running"
     }
 
 
-@app.get("/health")
-def health_check():
-    try:
-        client.admin.command("ping")
-
-        return {
-            "status": "success",
-            "mongodb": "connected"
-        }
-
-    except Exception as e:
-        return {
-            "status": "error",
-            "mongodb": "disconnected",
-            "error": str(e)
-        }
-
+# ============================================================
+# ANALYZE CROP IMAGE
+# ============================================================
 
 @app.post("/analyze")
-async def analyze_crop(file: UploadFile = File(...)):
+async def analyze_crop(
+    file: UploadFile = File(...)
+):
 
     try:
-        # Validate uploaded file
-        allowed_extensions = [".jpg", ".jpeg", ".png"]
-        MAX_FILE_SIZE = 5 * 1024 * 1024
 
-        file_extension = os.path.splitext(file.filename)[1].lower()
+        # ====================================================
+        # VALIDATE UPLOADED FILE
+        # ====================================================
+
+        allowed_extensions = [
+            ".jpg",
+            ".jpeg",
+            ".png"
+        ]
+
+        MAX_FILE_SIZE = 5 * 1024 * 1024  # 5 MB
+
+        file_extension = os.path.splitext(
+            file.filename
+        )[1].lower()
 
         if file_extension not in allowed_extensions:
+
             raise HTTPException(
                 status_code=400,
-                detail="Only JPG, JPEG, and PNG images are allowed."
+                detail="Only JPG, JPEG and PNG files are allowed."
             )
+
+        # ====================================================
+        # VALIDATE FILE SIZE
+        # ====================================================
+
         file_content = await file.read()
 
         if len(file_content) > MAX_FILE_SIZE:
+
             raise HTTPException(
                 status_code=400,
                 detail="File size must be less than 5 MB."
             )
-        file_content = await file.read()
 
-        if len(file_content) > MAX_FILE_SIZE:
-            raise HTTPException(
-                status_code=400,
-                detail="File size must be less than 5 MB."
-            )
-
+        # Reset file pointer
         await file.seek(0)
 
-        # Create unique filename
-        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        # ====================================================
+        # SAVE UPLOADED IMAGE
+        # ====================================================
+
+        timestamp = datetime.now().strftime(
+            "%Y%m%d_%H%M%S"
+        )
+
         filename = f"{timestamp}_{file.filename}"
+
         file_path = os.path.join(
             UPLOAD_FOLDER,
             filename
         )
-        file_path = os.path.join(UPLOAD_FOLDER, filename)
-        with open(file_path, "wb") as buffer:
-            shutil.copyfileobj(file.file, buffer)
-            pest_result = detect_pests_with_severity(
+
+        with open(
             file_path,
-            confidence=0.15
+            "wb"
+        ) as buffer:
+
+            shutil.copyfileobj(
+                file.file,
+                buffer
             )
 
+        # ====================================================
+        # PEST DETECTION + SEVERITY
+        # ====================================================
+
+        pest_result = detect_pests_with_severity(
+            file_path,
+            confidence=0.15
+        )
+
         detections = pest_result["detections"]
+
         severity_result = pest_result["severity"]
 
-        # ==========================================
-        # FORMAT PEST RESULT
-        # ==========================================
+        # ====================================================
+        # GET PEST NAME
+        # ====================================================
 
         if detections:
 
@@ -126,112 +185,146 @@ async def analyze_crop(file: UploadFile = File(...)):
                 )
             )
 
-            pest = ", ".join(pest_names)
+            pest = ", ".join(
+                pest_names
+            )
 
         else:
+
             pest = "No Major Pest Detected"
 
-        # ==========================================
-        # FINAL RESULT
-        # ==========================================
+        # ====================================================
+        # TEMPORARY DISEASE / RISK DATA
+        # ====================================================
+        #
+        # These are currently placeholders from the
+        # integration version.
+        #
+        # Disease model and risk model can be connected here
+        # later.
+        #
 
-        result = {
-
-            # Temporary disease result
-            "disease": "Leaf Blight",
-            "confidence": 94,
-
-            # Actual pest detection
-            "pest": pest,
-
-            # Actual severity estimation
-            "severity": severity_result["severity"],
-
-            # Temporary risk result
-            "risk": "High",
-
-            # Temporary recommendation
-            "recommendation":
-                "Follow Integrated Pest Management (IPM) practices.",
-
-            # Pest information
-            "pest_count": severity_result["pest_count"],
-
-            "affected_area_percentage":
-                severity_result["affected_area_percentage"],
-
-            "pest_detections": detections
-        }
-
-        # ==========================================
-        # SAVE ANALYSIS IN MONGODB
-        # ==========================================
-
-        analysis_data = {
-
-            "image": file_path,
-
-            "filename": file.filename,
-
-            "uploaded_at": datetime.now(),
-
-            **result
-        }
-
-        db["crop_analyses"].insert_one(
-            analysis_data
-        )
         crop = "Tomato"
+
         disease = "Early blight"
+
         confidence = 94.0
-        severity = "High"
+
         risk = "High"
+
         weather = "warm and humid"
 
-        # Generate recommendation
+        # ====================================================
+        # RECOMMENDATION
+        # ====================================================
+
         recommendation = generate_recommendation(
             crop=crop,
             disease=disease,
             weather=weather,
-            severity=severity
+            severity=severity_result["severity"]
         )
 
-        # Final analysis result
+        # ====================================================
+        # FINAL ANALYSIS RESULT
+        # ====================================================
+
         result = {
+
             "crop": crop,
+
             "disease": disease,
+
             "confidence": confidence,
-            "pest": "No Major Pest Detected",
-            "severity": severity,
+
+            "pest": pest,
+
+            "severity":
+                severity_result["severity"],
+
             "risk": risk,
+
             "weather": weather,
-            "recommendation": recommendation
+
+            "recommendation":
+                recommendation,
+
+            "affected_area_percentage":
+                severity_result[
+                    "affected_area_percentage"
+                ],
+
+            "pest_detections":
+                detections
         }
 
-        # Try saving to MongoDB
-        try:
-            analysis_data = {
-                "image": file_path,
-                "filename": file.filename,
-                "uploaded_at": datetime.now(),
-                **result
-            }
+        # ====================================================
+        # SAVE ANALYSIS IN MONGODB
+        # ====================================================
 
-            db["crop_analyses"].insert_one(analysis_data)
-            mongodb_status = "saved"
+        mongodb_status = "not_saved"
 
-        except Exception as db_error:
-            print("MongoDB SAVE ERROR:", repr(db_error))
-            mongodb_status = "not_saved"
-            return {
+        if db is not None:
+
+            try:
+
+                analysis_data = {
+
+                    "image": file_path,
+
+                    "filename": file.filename,
+
+                    "uploaded_at":
+                        datetime.now(),
+
+                    **result
+                }
+
+                db[
+                    "crop_analyses"
+                ].insert_one(
+                    analysis_data
+                )
+
+                mongodb_status = "saved"
+
+            except Exception as db_error:
+
+                print(
+                    "MongoDB SAVE ERROR:",
+                    repr(db_error)
+                )
+
+                mongodb_status = "not_saved"
+
+        # ====================================================
+        # RETURN RESPONSE
+        # ====================================================
+
+        return {
+
             "status": "success",
-            "message": "Crop image processed successfully",
-            "mongodb": mongodb_status,
-            "result": result
+
+            "message":
+                "Crop image analyzed successfully",
+
+            "mongodb":
+                mongodb_status,
+
+            "result":
+                result
         }
+
+    # ========================================================
+    # HTTP EXCEPTION
+    # ========================================================
 
     except HTTPException:
         raise
+
+    # ========================================================
+    # GENERAL ERROR
+    # ========================================================
 
     except Exception as e:
 
@@ -242,111 +335,27 @@ async def analyze_crop(file: UploadFile = File(...)):
 
         raise HTTPException(
             status_code=500,
-            detail="An error occurred while processing the crop image."
+            detail=str(e)
         )
 
 
-@app.get("/history")
-def get_history():
-
-    try:
-
-        analyses = list(
-            db["crop_analyses"]
-            .find({}, {"_id": 0})
-            .sort("uploaded_at", -1)
-        )
-
-        for analysis in analyses:
-
-            filename = os.path.basename(
-                analysis["image"]
-            )
-
-            analysis["image"] = f"/uploads/{filename}"
-
-        return {
-            "status": "success",
-            "count": len(analyses),
-            "history": analyses
-        }
-
-    except Exception as e:
-
-        print(
-            "HISTORY ERROR:",
-            repr(e)
-        )
-
-        raise HTTPException(
-            status_code=500,
-            detail="An error occurred while retrieving analysis history."
-        )
-
-
-@app.post("/register")
-def register_user(user: UserRequest):
-
-    # Check whether username already exists
-    existing_user = farmers_collection.find_one(
-        {"username": user.username}
-    )
-
-    if existing_user:
-        raise HTTPException(
-            status_code=400,
-            detail="Username already exists"
-        )
-
-    # Hash password
-    hashed_password = pwd_context.hash(
-        user.password
-    )
-
-    # Create user document
-    user_data = {
-        "username": user.username,
-        "password": hashed_password,
-        "created_at": datetime.now()
-    }
-
-    # Save user to MongoDB
-    farmers_collection.insert_one(
-        user_data
-    )
-
-    return {
-        "status": "success",
-        "message": "User registered successfully"
-    }
-
+# ============================================================
+# LOGIN
+# ============================================================
 
 @app.post("/login")
-def login_user(user: UserRequest):
+async def login():
 
-    # Find user by username
-    existing_user = farmers_collection.find_one(
-        {"username": user.username}
-    )
-
-    if not existing_user:
-        raise HTTPException(
-            status_code=401,
-            detail="Invalid username or password"
-        )
-
-    # Verify password
-    if not pwd_context.verify(
-        user.password,
-        existing_user["password"]
-    ):
-        raise HTTPException(
-            status_code=401,
-            detail="Invalid username or password"
-        )
+    # Temporary login response
+    # Replace with actual authentication later.
 
     return {
+
         "status": "success",
-        "message": "Login successful",
-        "username": user.username
+
+        "message":
+            "Login successful",
+
+        "username":
+            "user"
     }

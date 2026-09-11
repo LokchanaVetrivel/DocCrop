@@ -39,7 +39,7 @@ def detect_pests(image_path, confidence=0.15):
     results = model.predict(
         source=image_path,
         conf=confidence,
-        imgsz=320,
+        imgsz=640,
         verbose=False
     )
 
@@ -81,7 +81,7 @@ def detect_pests_with_severity(image_path, confidence=0.15):
     results = model.predict(
         source=image_path,
         conf=confidence,
-        imgsz=320,
+        imgsz=640,
         verbose=False
     )
 

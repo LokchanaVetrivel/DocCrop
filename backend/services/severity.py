@@ -1,17 +1,8 @@
 def calculate_severity(detections, image_width, image_height):
-    """
-    Estimate pest infestation severity using:
-    - Number of detected pests
-    - Total area covered by pest bounding boxes
 
-    Severity levels:
-    None, Low, Moderate, High
-    """
-
-    if not detections:
+    if not detections or image_width <= 0 or image_height <= 0:
         return {
             "severity": "None",
-            "pest_count": 0,
             "affected_area_percentage": 0.0
         }
 
@@ -20,6 +11,7 @@ def calculate_severity(detections, image_width, image_height):
     total_pest_area = 0
 
     for detection in detections:
+
         bbox = detection.get("bbox")
 
         if not bbox or len(bbox) != 4:
@@ -36,25 +28,25 @@ def calculate_severity(detections, image_width, image_height):
         total_pest_area / image_area
     ) * 100
 
-    pest_count = len(detections)
+    # Severity based ONLY on affected area
+    if affected_area_percentage == 0:
 
-    # Severity rules
-    if pest_count == 0:
         severity = "None"
 
-    elif pest_count <= 2 and affected_area_percentage < 5:
+    elif affected_area_percentage < 5:
+
         severity = "Low"
 
-    elif pest_count <= 5 and affected_area_percentage < 10:
+    elif affected_area_percentage < 10:
+
         severity = "Moderate"
 
     else:
+
         severity = "High"
 
     return {
         "severity": severity,
-        "pest_count": pest_count,
-        "affected_area_percentage": round(
-            affected_area_percentage, 2
-        )
+        "affected_area_percentage":
+            round(affected_area_percentage, 2)
     }
